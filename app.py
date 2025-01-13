@@ -36,3 +36,7 @@ def complete_todo(task_id):
 def date_format(value, fmt='%b %d'):
     dt = date.fromisoformat(value)
     return dt.strftime(fmt)
+
+
+if (__name__=="__main__"):
+    app.run()
