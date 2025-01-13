@@ -16,8 +16,7 @@ supabase: Client = create_client(url,key)
 
 @app.route('/', methods=['GET'])
 def index():
-    current_data = supabase.table("tasks").select('*').execute()
-    print(current_data.data)
+    current_data = supabase.table("tasks").select('*').order("due_date",desc=False).execute()
     return render_template('index.html', todos_list=current_data.data)
 
 @app.route('/newtodo', methods=['POST'])
@@ -26,17 +25,14 @@ def add_todo():
     plevel = request.form.get('priority_level')
     dd = request.form.get('due_date')
     resp = supabase.table("tasks").insert({'task':tname,'priority_level':int(plevel),'due_date':dd}).execute()
-    print(resp,"successfully inserted!!")
     return redirect(url_for('index'))
 
 @app.route('/done/<int:task_id>')
 def complete_todo(task_id):
     resp = supabase.table("tasks").update({"done":True}).eq("id",task_id).execute()
-    print(resp,"successfully completed! woohoo task done lets GO")
     return redirect(url_for('index'))
 
 @app.template_filter('fmtdate')
 def date_format(value, fmt='%b %d'):
     dt = date.fromisoformat(value)
-    print(dt.strftime(fmt))
     return dt.strftime(fmt)
