@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>stuff you should do</title>
+    <link href="https://cdn.jsdelivr.net/npm/daisyui@latest/dist/full.min.css" rel="stylesheet" type="text/css" />
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body>
+    <div class="m-10">
+        <h1 class="text-xl font-bold">stuff you should do <3</h1>
+        <div class="mb-10">
+            <form action="/newtodo" method="POST">
+                <input required autofocus type="text" placeholder="What are you up to today?" name="task_name" class="input input-bordered input-primary w-full my-5">
+                <select required class="select select-primary w-full" name="priority_level">
+                    <option disabled selected>Priority level?</option>
+                    <option>0</option>
+                    <option>1</option>
+                    <option>2</option>
+                    <option>3</option>
+                  </select>
+                <input required placeholder="When's it due?" type="text" onfocus="(this.type = 'date')" name="due_date" class="input input-bordered input-primary my-5 w-full">
+                <input type="submit" class="btn btn-primary">
+            </form>
+        </div>
+        {% for td in todos_list %}
+        <form action="{{ '/done/' + (td['id'] | string) }}" method="PUT" id="{{ 'todoform' + (td['id'] | string) }}"></form>
+            <input type="checkbox" class="checkbox">
+            <h3 class="text-md font-medium">{{ td['task'] }}</h3>
+            <div class="badge badge-secondary badge-outline">{{ td['due_date'] | fmtdate }}</div>
+        {% endfor %}
+    </div>
+</body>
+</html>
